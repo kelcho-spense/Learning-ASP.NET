@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookMs.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20231213080108_initialM")]
-    partial class initialM
+    [Migration("20231213214229_updated-AuthorID")]
+    partial class updatedAuthorID
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,13 +25,10 @@ namespace BookMs.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BookMs.Models.Author", b =>
+            modelBuilder.Entity("BookMs.Entities.Author", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BooksId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("FirstName")
@@ -42,19 +39,17 @@ namespace BookMs.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BooksId");
-
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("BookMs.Models.Book", b =>
+            modelBuilder.Entity("BookMs.Entities.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
+                    b.Property<Guid>("AuthorId")
+                        .HasColumnType("uuid");
 
                     b.Property<DateOnly?>("DatePublished")
                         .HasColumnType("date");
@@ -67,15 +62,22 @@ namespace BookMs.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AuthorId");
+
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("BookMs.Models.Author", b =>
+            modelBuilder.Entity("BookMs.Entities.Book", b =>
                 {
-                    b.HasOne("BookMs.Models.Book", "Books")
-                        .WithMany()
-                        .HasForeignKey("BooksId");
+                    b.HasOne("BookMs.Entities.Author", null)
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
+            modelBuilder.Entity("BookMs.Entities.Author", b =>
+                {
                     b.Navigation("Books");
                 });
 #pragma warning restore 612, 618

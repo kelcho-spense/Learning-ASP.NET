@@ -1,8 +1,7 @@
-using BookMs.Data;
+﻿using BookMs.Data;
 using BookMs.Services;
 using BookMs.Services.IServices;
 using Microsoft.EntityFrameworkCore;
-using BookMs.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +17,7 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 //register srvices for DI
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IAuthorService, AuthorService>();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

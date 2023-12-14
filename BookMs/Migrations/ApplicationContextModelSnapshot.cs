@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BookMs.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class BookContextModelSnapshot : ModelSnapshot
+    partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -22,7 +22,7 @@ namespace BookMs.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BookMs.Models.Author", b =>
+            modelBuilder.Entity("BookMs.Entities.Author", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -39,16 +39,13 @@ namespace BookMs.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("BookMs.Models.Book", b =>
+            modelBuilder.Entity("BookMs.Entities.Book", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("AuthorId1")
+                    b.Property<Guid>("AuthorId")
                         .HasColumnType("uuid");
 
                     b.Property<DateOnly?>("DatePublished")
@@ -62,19 +59,21 @@ namespace BookMs.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId1");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("BookMs.Models.Book", b =>
+            modelBuilder.Entity("BookMs.Entities.Book", b =>
                 {
-                    b.HasOne("BookMs.Models.Author", null)
+                    b.HasOne("BookMs.Entities.Author", null)
                         .WithMany("Books")
-                        .HasForeignKey("AuthorId1");
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("BookMs.Models.Author", b =>
+            modelBuilder.Entity("BookMs.Entities.Author", b =>
                 {
                     b.Navigation("Books");
                 });

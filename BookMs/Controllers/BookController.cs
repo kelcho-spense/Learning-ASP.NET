@@ -16,8 +16,8 @@ namespace BookMs.Controllers
         private readonly IMapper _mapper;
         public BookController(IBookService book, IMapper mapper)
         {
-            _book = book;
-            _mapper = mapper;
+            _book = book ?? throw new ArgumentNullException(nameof(book));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         // GET: api/book
         [HttpGet]

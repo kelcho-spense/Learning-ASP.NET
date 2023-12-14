@@ -41,7 +41,7 @@ namespace BookMs.Services
 
         public async Task<bool> UpdateBookAsync(Book book)
         {
-            _context.Update(book);
+            _context.Books.Update(book);
             return (await SaveChangesAsync());
         }
 
